@@ -15,11 +15,17 @@ def generate_goal():
     """Generate a random goal location within a 1 km radius from the user"""
     goal_location['lat'] = user_location['lat'] + random.uniform(-0.01, 0.01)
     goal_location['lon'] = user_location['lon'] + random.uniform(-0.01, 0.01)
+    return goal_location
 
 
 @app.route('/')
 def index():
     return render_template('index.html', user_location=user_location, goal_location=goal_location)
+
+
+@app.route('/generate_goal')
+def generate():
+    return generate_goal()
 
 
 @app.route('/update_location/<float:lat>/<float:lon>')
@@ -32,7 +38,7 @@ def update_location(lat, lon):
                                 (goal_location['lat'], goal_location['lon'])).meters
 
     if distance_to_goal < 10:
-        #generate_goal()
+        # generate_goal()
         return jsonify({'message': 'Goal!'})
 
     return jsonify({'message': ''})

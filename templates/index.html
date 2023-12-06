@@ -18,8 +18,6 @@
 <script>
     function initMap() {
 
-
-
         const map = new google.maps.Map(document.getElementById('map'), {
             center: {lat: 0, lng: 0},
             zoom: 15
@@ -51,6 +49,12 @@
                 .then(({message}) => message === 'Goal!' && alert('Goal!'))
                 .catch(error => console.error('Error updating location:', error));
         }, error => console.error('Error getting location:', error));
+
+        // fetch(`'/generate_goal`)
+        //         .then(response => response.json())
+        //         .then(goalMarker.setPosition({lat: response.lat, lng: response.long}))
+        //         .catch(error => console.error('Error updating location:', error));
+        // }, error => console.error('Error getting location:', error));
     }
 </script>
 
