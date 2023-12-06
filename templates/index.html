@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Game</title>
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<h1>Mini Game</h1>
+<div id="map"></div>
+
+<script>
+    function initMap() {
+
+
+
+        const map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: 0, lng: 0},
+            zoom: 15
+        });
+
+        const userMarker = new google.maps.Marker({
+            map,
+            title: 'User',
+            icon: 'ball.png'
+        });
+        const goalMarker = new google.maps.Marker({
+            map,
+            title: 'Goal',
+            icon: 'goal.png'
+        });
+
+        navigator.geolocation.watchPosition(({coords}) => {
+            const {latitude, longitude} = coords;
+            // Set the initial center of the map to the user's location
+
+            if (map.center.lat() === 0 && map.center.lng() === 0) {
+                map.setCenter({lat: latitude, lng: longitude});
+            }
+            userMarker.setPosition({lat: latitude, lng: longitude});
+
+
+            fetch(`/update_location/${latitude}/${longitude}`)
+                .then(response => response.json())
+                .then(({message}) => message === 'Goal!' && alert('Goal!'))
+                .catch(error => console.error('Error updating location:', error));
+        }, error => console.error('Error getting location:', error));
+    }
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?callback=initMap" async defer></script>
+</body>
+</html>
